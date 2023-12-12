@@ -1,0 +1,779 @@
+{
+  "meta": {
+    "instanceId": "de9483a760ca370949877532d71559046597a9378fbd31e6a68fd205b2f1f37d"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "path": "ghl",
+        "options": {}
+      },
+      "id": "cf00a01e-5fec-42fe-8243-47f24e8f1ad9",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        420
+      ],
+      "webhookId": "245a3e5a-1b87-4cfa-97e3-d11d3804a42b"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA",
+          "mode": "list",
+          "cachedResultName": "LeadMachine",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 894085312,
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "business_id",
+              "lookupValue": "={{ $json.query.business_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c292123a-ac79-4bc5-aae8-823f9606ae5c",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        20,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pS6RAGBfPrCenBNM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "email": "={{ $json.owner_email }}",
+        "phone": "=+{{ $json.business_phone }}",
+        "additionalFields": {
+          "address1": "={{ $json.street_address }}",
+          "city": "={{ $json.city }}",
+          "firstName": "={{ $json.owner_first }}",
+          "lastName": "={{ $json.owner_last }}",
+          "postalCode": "={{ $json.zip_code }}",
+          "state": "={{ $json.state }}",
+          "tags": "all",
+          "website": "={{ $json.website }}"
+        }
+      },
+      "id": "917973c6-e2bf-4224-b6d3-1b481583b762",
+      "name": "HighLevel",
+      "type": "n8n-nodes-base.highLevel",
+      "typeVersion": 1,
+      "position": [
+        300,
+        420
+      ],
+      "credentials": {
+        "highLevelApi": {
+          "id": "iijQuTsmYKOBYcp6",
+          "name": "HighLevel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA",
+          "mode": "list",
+          "cachedResultName": "LeadMachine",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 894085312,
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "business_id": "={{ $('Webhook').item.json.query.business_id }}",
+            "sent_to_ghl": "Success"
+          },
+          "matchingColumns": [
+            "business_id"
+          ],
+          "schema": [
+            {
+              "id": "business_id",
+              "displayName": "business_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "niche",
+              "displayName": "niche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "business_name",
+              "displayName": "business_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "business_phone",
+              "displayName": "business_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "verify_phone",
+              "displayName": "verify_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone_type",
+              "displayName": "phone_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "call_business",
+              "displayName": "call_business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "owner_first",
+              "displayName": "owner_first",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "owner_last",
+              "displayName": "owner_last",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "search_owner",
+              "displayName": "search_owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "owner_email",
+              "displayName": "owner_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "verify_email",
+              "displayName": "verify_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email_verified",
+              "displayName": "email_verified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "google_rating",
+              "displayName": "google_rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "review_count",
+              "displayName": "review_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "send_ghl",
+              "displayName": "send_ghl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "sent_to_ghl",
+              "displayName": "sent_to_ghl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "actions_taken",
+              "displayName": "actions_taken",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "facebook_url",
+              "displayName": "facebook_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "facebook_id",
+              "displayName": "facebook_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "facebook_email",
+              "displayName": "facebook_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "instagram_url",
+              "displayName": "instagram_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "linkedin_url",
+              "displayName": "linkedin_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "street_address",
+              "displayName": "street_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "zip_code",
+              "displayName": "zip_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "one_star",
+              "displayName": "one_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "two_star",
+              "displayName": "two_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "three_star",
+              "displayName": "three_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "four_star",
+              "displayName": "four_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "five_star",
+              "displayName": "five_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4d3c7a02-11b9-45d1-83a2-4b3d70a3fdfe",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        560,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pS6RAGBfPrCenBNM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA",
+          "mode": "list",
+          "cachedResultName": "LeadMachine",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1959914128,
+          "mode": "list",
+          "cachedResultName": "Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "outcome": "={{ $json.sent_to_ghl }}",
+            "time": "={{ $now.format(\"HH:mm:ss\") }}",
+            "date": "={{ $now.format(\"DD\") }}",
+            "task_name": "Send Lead to Go High Level",
+            "message": "={{ $('Google Sheets').item.json.owner_first }} {{ $('Google Sheets').item.json.owner_last }} from {{ $('Google Sheets').item.json.business_name }} in {{ $('Google Sheets').item.json.city }} {{ $('Google Sheets').item.json.state }} Has been successfully added to Go High Level."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "task_name",
+              "displayName": "task_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "niche",
+              "displayName": "niche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "limit",
+              "displayName": "limit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "api_one_results",
+              "displayName": "api_one_results",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "api_two_results",
+              "displayName": "api_two_results",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "outcome",
+              "displayName": "outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lastNodeExecuted",
+              "displayName": "lastNodeExecuted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2deb4dea-0eef-4351-89d1-45fc3184a7cb",
+      "name": "Google Sheets2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        820,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pS6RAGBfPrCenBNM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Catch Webhook \n**Catches webhook when 'Send to GHL' link is clicked. Receives API Key and business_id**",
+        "height": 291
+      },
+      "id": "ba864dad-232e-4595-ad85-3d9c0ba7405c",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Get Lead Data \n**Gets lead data from Google Sheets by matching business_id**",
+        "height": 291
+      },
+      "id": "d116510d-90e7-4ffa-ab0a-f55b8f23298e",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Create GHL Contact \n**Creates a new contact in GHL, adds 'all' tag.**",
+        "height": 291,
+        "width": 256
+      },
+      "id": "4e7a8e18-527c-414e-9771-217426d0d304",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Update Lead \n**Updates 'sent_to_ghl' cell in leads.**",
+        "height": 291
+      },
+      "id": "abc8ea3e-1d6c-4e83-b86b-0fb036dda9b8",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Update Logs \n**Update logs**",
+        "height": 291
+      },
+      "id": "8b4f8f77-4be5-4413-9cfa-454ce2f744d2",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        760,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "HighLevel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HighLevel": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
