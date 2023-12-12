@@ -1,0 +1,1178 @@
+{
+  "meta": {
+    "instanceId": "de9483a760ca370949877532d71559046597a9378fbd31e6a68fd205b2f1f37d"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "path": "leadMachine",
+        "options": {}
+      },
+      "id": "446ad138-79b1-4681-a3b5-dcdd1bf8eaf7",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        159,
+        440
+      ],
+      "webhookId": "0d0b8888-3f00-44df-b04d-ecb9f2178716"
+    },
+    {
+      "parameters": {
+        "content": "## Webhook \n**Catches the webhook from Dashboard.**",
+        "height": 266,
+        "width": 309
+      },
+      "id": "a319e545-795e-4983-b78b-433b42ae5856",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        69,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://local-business-data.p.rapidapi.com/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.query.niche }} in {{ $json.query.city }}, {{ $json.query.state }}"
+            },
+            {
+              "name": "limit",
+              "value": "={{ $json.query.limit }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "={{ $json[\"query\"][\"rapidapi\"] }}"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "local-business-data.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c9acd69-8df7-41e8-b864-431a83b648b5",
+      "name": "GET Business Info1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        520,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://local-business-data.p.rapidapi.com/business-details",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "business_id",
+              "value": "={{ $json.business_id }}"
+            },
+            {
+              "name": "extract_emails_and_contacts",
+              "value": "=true"
+            },
+            {
+              "name": "extract_share_link",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "={{ $('Webhook').item.json[\"query\"][\"rapidapi\"] }}"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "local-business-data.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 2
+            }
+          }
+        }
+      },
+      "id": "d84e9f27-7670-4681-b42a-f8afd2b28419",
+      "name": "ENRICH Business Info1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1200,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "id": "27b5725b-3eda-42ac-bc2e-214d13bbdef9",
+      "name": "EXTRACT Nested Items1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1580,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "id": "0db5b323-1dcb-4b62-b720-d116277d4c73",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        860,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 1st Business Data API Call \n**Scrapes Niche, City, State for Business for 1st set of Business Data.**",
+        "height": 266,
+        "width": 339
+      },
+      "id": "d4c21c52-14ae-4d0b-9b82-40bcee94105d",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Split out Needed Data \n**Separates usedful data from the API call**",
+        "height": 266,
+        "width": 313
+      },
+      "id": "5945926a-ff4b-4b30-a95d-cab105382dcb",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        760,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Enrich Data  \n**Enriches the data with a second API call using the business_id to get socials, etc**",
+        "height": 266,
+        "width": 312
+      },
+      "id": "56a69cac-ee51-48eb-853b-a08f19737ea9",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "summarize",
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6043bcbf-4226-4df9-9f5e-f324238689a3",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1400,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "summarize",
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "228e429f-5f46-4218-8c1b-b2d5eab81dcd",
+      "name": "Item Lists2",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1400,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "1913d823-8a6f-435b-ba71-79062b097890",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        2080,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pulls API Data for Logs\n**This just pulls data from the API call to be used in the logs for the spreadsheet. You can see this in the 'Logs' tab on your sheet**",
+        "height": 456,
+        "width": 1457.0066219348287
+      },
+      "id": "464d7b2c-1318-4ce4-90f3-67ce5e16d38b",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Split Socials, Phone, Email  \n**Splits out the newly available data from the second API call**",
+        "height": 266,
+        "width": 333.816608230494
+      },
+      "id": "188c0126-4132-4ee2-8d01-e8a19c48a377",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA",
+          "mode": "list",
+          "cachedResultName": "LeadMachine",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 894085312,
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "business_id": "={{ $json.business_id }}",
+            "niche": "={{ $('Webhook').item.json.query.niche }}",
+            "business_name": "={{ $json.name }}",
+            "google_rating": "={{ $json.rating }}",
+            "review_count": "={{ $json.review_count }}",
+            "business_phone": "={{ $json.phone_number }}",
+            "call_business": "={{ $('Edit Fields2').item.json[\"call_business\"] }}",
+            "website": "={{ $json.website }}",
+            "facebook_url": "={{ $json.emails_and_contacts.facebook }}",
+            "instagram_url": "={{ $json.emails_and_contacts.instagram }}",
+            "linkedin_url": "={{ $json.emails_and_contacts.linkedin }}",
+            "street_address": "={{ $json.street_address }}",
+            "city": "={{ $json.city }}",
+            "state": "={{ $json.state }}",
+            "zip_code": "={{ $json.zipcode }}",
+            "one_star": "={{ $json['reviews_per_rating.1'] }}",
+            "two_star": "={{ $json['reviews_per_rating.2'] }}",
+            "three_star": "={{ $json['reviews_per_rating.3'] }}",
+            "four_star": "={{ $json['reviews_per_rating.4'] }}",
+            "five_star": "={{ $json['reviews_per_rating.5'] }}",
+            "search_owner": "={{ $json[\"search_owner\"] }}"
+          },
+          "matchingColumns": [
+            "business_id"
+          ],
+          "schema": [
+            {
+              "id": "business_id",
+              "displayName": "business_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "niche",
+              "displayName": "niche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_name",
+              "displayName": "business_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_phone",
+              "displayName": "business_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "call_business",
+              "displayName": "call_business",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_type",
+              "displayName": "phone_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "search_owner",
+              "displayName": "search_owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "owner_first",
+              "displayName": "owner_first",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "owner_last",
+              "displayName": "owner_last",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email_verified",
+              "displayName": "email_verified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "owner_email",
+              "displayName": "owner_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "google_rating",
+              "displayName": "google_rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "review_count",
+              "displayName": "review_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "actions_taken",
+              "displayName": "actions_taken",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "facebook_url",
+              "displayName": "facebook_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "facebook_id",
+              "displayName": "facebook_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "facebook_email",
+              "displayName": "facebook_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "instagram_url",
+              "displayName": "instagram_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "linkedin_url",
+              "displayName": "linkedin_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "street_address",
+              "displayName": "street_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "zip_code",
+              "displayName": "zip_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "one_star",
+              "displayName": "one_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "two_star",
+              "displayName": "two_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "three_star",
+              "displayName": "three_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "four_star",
+              "displayName": "four_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "five_star",
+              "displayName": "five_star",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "dd55e296-e2b6-4b6e-af9e-50e1e3b65a0a",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        2860,
+        420
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pS6RAGBfPrCenBNM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA",
+          "mode": "list",
+          "cachedResultName": "LeadMachine",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1959914128,
+          "mode": "list",
+          "cachedResultName": "Logs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "time": "={{ $now.format(\"HH:mm:ss\") }}",
+            "date": "={{ $now.format(\"DD\") }}",
+            "task_name": "Scrape Leads",
+            "niche": "={{ $('Webhook').item.json.query.niche }}",
+            "city": "={{ $('Webhook').item.json.query.city }}",
+            "state": "={{ $('Webhook').item.json.query.state }}",
+            "limit": "={{ $('Webhook').item.json.query.limit }}",
+            "api_one_results": "={{ $json.api_one_count }}",
+            "api_two_results": "={{ $json.api_two_count }}",
+            "Outcome": "Success"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "task_name",
+              "displayName": "task_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "niche",
+              "displayName": "niche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "limit",
+              "displayName": "limit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "api_one_results",
+              "displayName": "api_one_results",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "api_two_results",
+              "displayName": "api_two_results",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d3e7b089-e284-40c9-85c4-4ddfcad4c855",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        2520,
+        920
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pS6RAGBfPrCenBNM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "reviews_per_rating.1, reviews_per_rating.2, reviews_per_rating.3, reviews_per_rating.4, reviews_per_rating.5, business_id",
+        "options": {}
+      },
+      "id": "9ed845fd-c6dd-4db1-b96d-a49ff636ddf9",
+      "name": "Item Lists3",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "business_id",
+              "field2": "business_id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f0f6bfa9-14a8-4314-9536-eacd4c6f5e29",
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        2140,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "api_one_count",
+              "stringValue": "={{ $json.count_data }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "b712782f-310a-4682-8c20-fcc2dd8eded2",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "api_two_count",
+              "type": "numberValue",
+              "numberValue": "={{ $json.count_data }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "e3a3715b-cd34-4e3d-b8ba-5a5df0881e41",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        1840,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "limit"
+      },
+      "id": "b8e7d542-b4b0-4dad-b285-3919213b7379",
+      "name": "Item Lists4",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        2300,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "count_data",
+        "options": {}
+      },
+      "id": "eb7f41ca-c96e-4f60-9cf5-755cbc7cae36",
+      "name": "Item Lists5",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1620,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "count_data",
+        "options": {}
+      },
+      "id": "b6cfc902-53f6-4317-bccd-2cb94de7c5ec",
+      "name": "Item Lists6",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        1620,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Split out Review Data  \n**Splits out individual company reviews by rating**",
+        "height": 266,
+        "width": 312
+      },
+      "id": "40ce6c7b-6e2c-43a3-9442-310085545c21",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Merge Data  \n**Merges the data together**",
+        "height": 266,
+        "width": 312
+      },
+      "id": "efc6bb00-d07d-438c-a37d-a3353d17fff1",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Write Leads  \n**Writes the leads to Google Sheets**",
+        "height": 266,
+        "width": 312
+      },
+      "id": "3a54d7b2-3813-4fd5-b40d-56f03de1b6a0",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2760,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "search_owner",
+              "stringValue": "={{'=HYPERLINK(\"https://www.google.com/search?q='}}owner+{{ $json.name }}+in+{{ $json.city }}+{{ $json.state }}\", \"Search Owner\")"
+            },
+            {
+              "name": "call_business",
+              "stringValue": "={{'=HYPERLINK(\"https://call.ctrlq.org/'}}{{ $json.phone_number }}\", \"Call Business\")"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47157d83-7bcd-4527-83d8-166dc4c15cce",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        2500,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Create Formulas  \n**Creates formulas to be used in Google Sheets**",
+        "height": 266,
+        "width": 312
+      },
+      "id": "ab099019-124c-4a52-ba43-4fdcde71014f",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        340
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "GET Business Info1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET Business Info1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENRICH Business Info1": {
+      "main": [
+        [
+          {
+            "node": "EXTRACT Nested Items1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Item Lists2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXTRACT Nested Items1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Item Lists1": {
+      "main": [
+        [
+          {
+            "node": "ENRICH Business Info1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Item Lists5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists2": {
+      "main": [
+        [
+          {
+            "node": "Item Lists6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Item Lists4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Item Lists4": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
