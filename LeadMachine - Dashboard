@@ -257,7 +257,7 @@
       "parameters": {
         "content": "## Pulls API Data for Logs\n**This just pulls data from the API call to be used in the logs for the spreadsheet. You can see this in the 'Logs' tab on your sheet**",
         "height": 456,
-        "width": 1457.0066219348287
+        "width": 1731.9430249724608
       },
       "id": "464d7b2c-1318-4ce4-90f3-67ce5e16d38b",
       "name": "Sticky Note4",
@@ -301,16 +301,19 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
             "business_id": "={{ $json.business_id }}",
             "niche": "={{ $('Webhook').item.json.query.niche }}",
             "business_name": "={{ $json.name }}",
+            "business_phone": "={{ $json.phone_number }}",
+            "verify_phone": "={{ $json.verify_phone }}",
+            "call_business": "={{ $('Edit Fields2').item.json[\"call_business\"] }}",
+            "search_owner": "={{ $json.search_owner }}",
+            "verify_email": "={{ $json.verify_email }}",
             "google_rating": "={{ $json.rating }}",
             "review_count": "={{ $json.review_count }}",
-            "business_phone": "={{ $json.phone_number }}",
-            "call_business": "={{ $('Edit Fields2').item.json[\"call_business\"] }}",
-            "website": "={{ $json.website }}",
+            "send_ghl": "={{ $json.add_ghl }}",
             "facebook_url": "={{ $json.emails_and_contacts.facebook }}",
             "instagram_url": "={{ $json.emails_and_contacts.instagram }}",
             "linkedin_url": "={{ $json.emails_and_contacts.linkedin }}",
@@ -318,16 +321,14 @@
             "city": "={{ $json.city }}",
             "state": "={{ $json.state }}",
             "zip_code": "={{ $json.zipcode }}",
+            "website": "={{ $json.website }}",
             "one_star": "={{ $json['reviews_per_rating.1'] }}",
             "two_star": "={{ $json['reviews_per_rating.2'] }}",
             "three_star": "={{ $json['reviews_per_rating.3'] }}",
             "four_star": "={{ $json['reviews_per_rating.4'] }}",
-            "five_star": "={{ $json['reviews_per_rating.5'] }}",
-            "search_owner": "={{ $json[\"search_owner\"] }}"
+            "five_star": "={{ $json['reviews_per_rating.5'] }}"
           },
-          "matchingColumns": [
-            "business_id"
-          ],
+          "matchingColumns": [],
           "schema": [
             {
               "id": "business_id",
@@ -336,8 +337,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
               "id": "niche",
@@ -367,8 +367,8 @@
               "canBeUsedToMatch": true
             },
             {
-              "id": "call_business",
-              "displayName": "call_business",
+              "id": "verify_phone",
+              "displayName": "verify_phone",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -386,8 +386,8 @@
               "removed": true
             },
             {
-              "id": "search_owner",
-              "displayName": "search_owner",
+              "id": "call_business",
+              "displayName": "call_business",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -415,8 +415,17 @@
               "removed": true
             },
             {
-              "id": "email_verified",
-              "displayName": "email_verified",
+              "id": "search_owner",
+              "displayName": "search_owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "owner_email",
+              "displayName": "owner_email",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -425,8 +434,17 @@
               "removed": true
             },
             {
-              "id": "owner_email",
-              "displayName": "owner_email",
+              "id": "verify_email",
+              "displayName": "verify_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email_verified",
+              "displayName": "email_verified",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -455,6 +473,25 @@
             {
               "id": "notes",
               "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "send_ghl",
+              "displayName": "send_ghl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sent_to_ghl",
+              "displayName": "sent_to_ghl",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -620,7 +657,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        2860,
+        3420,
         420
       ],
       "credentials": {
@@ -648,19 +685,8 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
         },
         "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "time": "={{ $now.format(\"HH:mm:ss\") }}",
-            "date": "={{ $now.format(\"DD\") }}",
-            "task_name": "Scrape Leads",
-            "niche": "={{ $('Webhook').item.json.query.niche }}",
-            "city": "={{ $('Webhook').item.json.query.city }}",
-            "state": "={{ $('Webhook').item.json.query.state }}",
-            "limit": "={{ $('Webhook').item.json.query.limit }}",
-            "api_one_results": "={{ $json.api_one_count }}",
-            "api_two_results": "={{ $json.api_two_count }}",
-            "Outcome": "Success"
-          },
+          "mappingMode": "autoMapInputData",
+          "value": {},
           "matchingColumns": [],
           "schema": [
             {
@@ -742,12 +768,29 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "Outcome",
-              "displayName": "Outcome",
+              "id": "outcome",
+              "displayName": "outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lastNodeExecuted",
+              "displayName": "lastNodeExecuted",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -763,7 +806,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        2520,
+        2740,
         920
       ],
       "credentials": {
@@ -936,7 +979,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2760,
+        3320,
         340
       ]
     },
@@ -951,6 +994,18 @@
             {
               "name": "call_business",
               "stringValue": "={{'=HYPERLINK(\"https://call.ctrlq.org/'}}{{ $json.phone_number }}\", \"Call Business\")"
+            },
+            {
+              "name": "add_ghl",
+              "stringValue": "={{ '=HYPERLINK(\"' + $('Webhook').item.json[\"query\"][\"highlevelwebhook\"] + '/?business_id=' + $json.business_id + '\", \"Send to GHL\")' }}\n\n"
+            },
+            {
+              "name": "verify_phone",
+              "stringValue": "={{ '=HYPERLINK(\"' + $('Webhook').item.json[\"query\"][\"phone_verify_webhook\"] + '/?business_id=' + $json.business_id + '\" & \"&clearoutapi=\" &API_keys!D18, \"Verify Phone\")' }}"
+            },
+            {
+              "name": "verify_email",
+              "stringValue": "={{ '=HYPERLINK(\"' + $('Webhook').item.json[\"query\"][\"email_verify_webook\"] + '/?business_id=' + $json.business_id + '\" & \"&verifyemailapi=\" &API_keys!D24, \"Verify Email\")' }}"
             }
           ]
         },
@@ -978,6 +1033,181 @@
       "position": [
         2400,
         340
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "business_id",
+              "stringValue": "={{ $json.business_id }}"
+            },
+            {
+              "name": "niche",
+              "stringValue": "={{ $('Webhook').item.json.query.niche }}"
+            },
+            {
+              "name": "business_name",
+              "stringValue": "={{ $json.name }}"
+            },
+            {
+              "name": "business_phone",
+              "stringValue": "={{ $json.phone_number }}"
+            },
+            {
+              "name": "search_owner",
+              "stringValue": "={{ $json.search_owner }}"
+            },
+            {
+              "name": "verify_phone",
+              "stringValue": "={{ $json.verify_phone }}"
+            },
+            {
+              "name": "call_business",
+              "stringValue": "={{ $json.call_business }}"
+            },
+            {
+              "name": "verify_email",
+              "stringValue": "={{ $json.verify_phone }}"
+            },
+            {
+              "name": "google_rating",
+              "stringValue": "={{ $json.rating }}"
+            },
+            {
+              "name": "review_count",
+              "stringValue": "={{ $json.review_count }}"
+            },
+            {
+              "name": "send_ghl",
+              "stringValue": "={{ $json.add_ghl }}"
+            },
+            {
+              "name": "website",
+              "stringValue": "={{ $json.website }}"
+            },
+            {
+              "name": "facebook_url",
+              "stringValue": "={{ $json.emails_and_contacts.facebook }}"
+            },
+            {
+              "name": "instagram_url",
+              "stringValue": "={{ $json.emails_and_contacts.instagram }}"
+            },
+            {
+              "name": "linkedin_url",
+              "stringValue": "={{ $json.emails_and_contacts.linkedin }}"
+            },
+            {
+              "name": "street_address",
+              "stringValue": "={{ $json.street_address }}"
+            },
+            {
+              "name": "city",
+              "stringValue": "={{ $json.city }}"
+            },
+            {
+              "name": "state",
+              "stringValue": "={{ $json.state }}"
+            },
+            {
+              "name": "zip_code",
+              "stringValue": "={{ $json.zipcode }}"
+            },
+            {
+              "name": "one_star",
+              "stringValue": "={{ $json['reviews_per_rating.1'] }}"
+            },
+            {
+              "name": "two_star",
+              "stringValue": "={{ $json['reviews_per_rating.2'] }}"
+            },
+            {
+              "name": "three_star",
+              "stringValue": "={{ $json['reviews_per_rating.3'] }}"
+            },
+            {
+              "name": "four_star",
+              "stringValue": "={{ $json['reviews_per_rating.4'] }}"
+            },
+            {
+              "name": "five_star",
+              "stringValue": "={{ $json['reviews_per_rating.5'] }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "eaca6155-f8fc-4c59-8092-74bbf2a2b4c8",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        2960,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set Sheet Fields\n*Formats data to automatically populate sheet*",
+        "height": 266,
+        "width": 312
+      },
+      "id": "c11e20d6-f814-4475-a59c-438aebff27bd",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2860,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "time",
+              "stringValue": "={{ $now.format(\"HH:mm:ss\") }}"
+            },
+            {
+              "name": "date",
+              "stringValue": "={{ $now.format(\"DD\") }}"
+            },
+            {
+              "name": "task_name",
+              "stringValue": "Scrape Leads"
+            },
+            {
+              "name": "ip_address",
+              "stringValue": "={{ $('Webhook').item.json.headers['x-real-ip'] }}"
+            },
+            {
+              "name": "user_os",
+              "stringValue": "={{ $('Webhook').item.json.headers['sec-ch-ua-platform'] }}"
+            },
+            {
+              "name": "outcome",
+              "stringValue": "=success"
+            },
+            {
+              "name": "message",
+              "stringValue": "= Niche: {{ $('Webhook').item.json.query.niche }} / City: {{ $('Webhook').item.json.query.city }} / State: {{ $('Webhook').item.json.query.state }} / Limit: {{ $('Webhook').item.json.query.limit }} / [Scraped Leads: {{ $json.api_two_count }}]"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "f00e7e47-4c00-4226-858d-1952bae0caef",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        2520,
+        920
       ]
     }
   ],
@@ -1133,7 +1363,7 @@
       "main": [
         [
           {
-            "node": "Google Sheets1",
+            "node": "Edit Fields4",
             "type": "main",
             "index": 0
           }
@@ -1166,7 +1396,29 @@
       "main": [
         [
           {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
             "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
             "type": "main",
             "index": 0
           }
