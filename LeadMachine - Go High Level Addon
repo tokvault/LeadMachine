@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -240,
+        -640,
         420
       ],
       "webhookId": "245a3e5a-1b87-4cfa-97e3-d11d3804a42b"
@@ -49,7 +49,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        20,
+        -380,
         420
       ],
       "credentials": {
@@ -79,7 +79,7 @@
       "type": "n8n-nodes-base.highLevel",
       "typeVersion": 1,
       "position": [
-        300,
+        -80,
         420
       ],
       "credentials": {
@@ -107,7 +107,7 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
             "business_id": "={{ $('Webhook').item.json.query.business_id }}",
             "sent_to_ghl": "Success"
@@ -475,7 +475,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        560,
+        400,
         420
       ],
       "credentials": {
@@ -484,6 +484,178 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## Catch Webhook \n**Catches webhook when 'Send to GHL' link is clicked. Receives API Key and business_id**",
+        "height": 291
+      },
+      "id": "ba864dad-232e-4595-ad85-3d9c0ba7405c",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Get Lead Data \n**Gets lead data from Google Sheets by matching business_id**",
+        "height": 291
+      },
+      "id": "d116510d-90e7-4ffa-ab0a-f55b8f23298e",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Create GHL Contact \n**Creates a new contact in GHL, adds 'all' tag.**",
+        "height": 291,
+        "width": 256
+      },
+      "id": "4e7a8e18-527c-414e-9771-217426d0d304",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Update Lead \n**Updates 'sent_to_ghl' cell in leads.**",
+        "height": 291
+      },
+      "id": "abc8ea3e-1d6c-4e83-b86b-0fb036dda9b8",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Update Logs \n**Update logs**",
+        "height": 291
+      },
+      "id": "8b4f8f77-4be5-4413-9cfa-454ce2f744d2",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "business_id",
+              "stringValue": "={{ $('Google Sheets').item.json.business_id }}"
+            },
+            {
+              "name": "sent_to_ghl",
+              "stringValue": "success"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "26e78197-0940-4c57-a6d8-ca653d01104c",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        160,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "tags",
+        "options": {}
+      },
+      "id": "bbbd17a5-84e7-44f6-a853-2b14155e59d2",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [
+        400,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "33bf62ef-ce2b-4a61-b555-f9350c84a6ef",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        840,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "time",
+              "stringValue": "={{ $now.format(\"HH:mm:ss\") }}"
+            },
+            {
+              "name": "date",
+              "stringValue": "={{ $now.format(\"DD\") }}"
+            },
+            {
+              "name": "ip_address",
+              "stringValue": "={{ $('Webhook').item.json.headers['x-real-ip'] }}"
+            },
+            {
+              "name": "user_os",
+              "stringValue": "={{ $('Webhook').item.json.headers['sec-ch-ua-platform'] }}"
+            },
+            {
+              "name": "task_name",
+              "stringValue": "Add Lead to GHL"
+            },
+            {
+              "name": "outcome",
+              "stringValue": "={{ $json.sent_to_ghl }}"
+            },
+            {
+              "name": "message",
+              "stringValue": "=Lead: {{ $('HighLevel').item.json.firstName }} {{ $('HighLevel').item.json.lastName }} / Tags: {{ $json.tags }} / Loction ID: {{ $('HighLevel').item.json.locationId }} / Type: {{ $('HighLevel').item.json.type }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "48c038ed-d775-457e-bd4b-43c822ded504",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        1100,
+        400
+      ]
     },
     {
       "parameters": {
@@ -503,13 +675,13 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
-            "outcome": "={{ $json.sent_to_ghl }}",
             "time": "={{ $now.format(\"HH:mm:ss\") }}",
             "date": "={{ $now.format(\"DD\") }}",
-            "task_name": "Send Lead to Go High Level",
-            "message": "={{ $('Google Sheets').item.json.owner_first }} {{ $('Google Sheets').item.json.owner_last }} from {{ $('Google Sheets').item.json.business_name }} in {{ $('Google Sheets').item.json.city }} {{ $('Google Sheets').item.json.state }} Has been successfully added to Go High Level."
+            "outcome": "={{ $json.outcome }}",
+            "message": "={{ $json.message }}",
+            "task_name": "={{ $json.task_name }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -625,30 +797,20 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "row_number",
-              "displayName": "row_number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
               "canBeUsedToMatch": true,
-              "readOnly": true,
               "removed": true
             }
           ]
         },
         "options": {}
       },
-      "id": "2deb4dea-0eef-4351-89d1-45fc3184a7cb",
-      "name": "Google Sheets2",
+      "id": "aa8e2e54-5c48-4a5b-b7cc-9f39ffe79eea",
+      "name": "Google Sheets4",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        820,
-        420
+        1380,
+        400
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -659,72 +821,29 @@
     },
     {
       "parameters": {
-        "content": "## Catch Webhook \n**Catches webhook when 'Send to GHL' link is clicked. Receives API Key and business_id**",
+        "content": "## Set Headers \n**Sets data for headers**",
         "height": 291
       },
-      "id": "ba864dad-232e-4595-ad85-3d9c0ba7405c",
-      "name": "Sticky Note",
+      "id": "84b39f89-92ed-4bd3-80dc-1029aa40fead",
+      "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -300,
+        1040,
         300
       ]
     },
     {
       "parameters": {
-        "content": "## Get Lead Data \n**Gets lead data from Google Sheets by matching business_id**",
+        "content": "## Merge Data\n**Combines tages with the rest of data**",
         "height": 291
       },
-      "id": "d116510d-90e7-4ffa-ab0a-f55b8f23298e",
-      "name": "Sticky Note1",
+      "id": "8cb15c3e-404a-4bf4-a6d6-ed0e301de180",
+      "name": "Sticky Note6",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -40,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Create GHL Contact \n**Creates a new contact in GHL, adds 'all' tag.**",
-        "height": 291,
-        "width": 256
-      },
-      "id": "4e7a8e18-527c-414e-9771-217426d0d304",
-      "name": "Sticky Note2",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        220,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Update Lead \n**Updates 'sent_to_ghl' cell in leads.**",
-        "height": 291
-      },
-      "id": "abc8ea3e-1d6c-4e83-b86b-0fb036dda9b8",
-      "name": "Sticky Note3",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        500,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Update Logs \n**Update logs**",
-        "height": 291
-      },
-      "id": "8b4f8f77-4be5-4413-9cfa-454ce2f744d2",
-      "name": "Sticky Note4",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        760,
+        780,
         300
       ]
     }
@@ -756,7 +875,12 @@
       "main": [
         [
           {
-            "node": "Google Sheets1",
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Item Lists",
             "type": "main",
             "index": 0
           }
@@ -767,7 +891,51 @@
       "main": [
         [
           {
-            "node": "Google Sheets2",
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets4",
             "type": "main",
             "index": 0
           }
