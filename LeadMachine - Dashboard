@@ -1005,7 +1005,7 @@
             },
             {
               "name": "verify_email",
-              "stringValue": "={{ '=HYPERLINK(\"' + $('Webhook').item.json[\"query\"][\"email_verify_webook\"] + '/?business_id=' + $json.business_id + '\" & \"&verifyemailapi=\" &API_keys!D24, \"Verify Email\")' }}"
+              "stringValue": "={{ '=HYPERLINK(\"' + $('Webhook').item.json[\"query\"][\"email_verify_webhook\"] + '/?business_id=' + $json.business_id + '\" & \"&verifyemailapi=\" &API_keys!D24, \"Verify Email\")' }}"
             }
           ]
         },
@@ -1069,7 +1069,7 @@
             },
             {
               "name": "verify_email",
-              "stringValue": "={{ $json.verify_phone }}"
+              "stringValue": "={{ $json.verify_email }}"
             },
             {
               "name": "google_rating",
