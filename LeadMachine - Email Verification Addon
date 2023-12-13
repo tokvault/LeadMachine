@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -760,
+        -1200,
         460
       ],
       "webhookId": "aff5dc82-16ed-4228-ab91-6aae70448dda"
@@ -49,7 +49,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        -500,
+        -940,
         460
       ],
       "credentials": {
@@ -69,7 +69,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        -240,
+        -680,
         460
       ]
     },
@@ -459,7 +459,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        20,
+        -420,
         460
       ],
       "credentials": {
@@ -487,14 +487,13 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
             "time": "={{ $now.format(\"HH:mm:ss\") }}",
             "date": "={{ $now.format(\"DD\") }}",
-            "task_name": "Email Verification",
-            "outcome": "=success",
-            "message": "=The email {{ $('HTTP Request').item.json.response.email }} for {{ $('Google Sheets').item.json.owner_first }} {{ $('Google Sheets').item.json.owner_last }} of {{ $('Google Sheets').item.json.business_name }} is valid({{ $('HTTP Request').item.json.response.syntax.valid }}) deliverable({{ $('HTTP Request').item.json.response.smtp.deliverable }}) CatchAll({{ $('HTTP Request').item.json.response.smtp.catch_all }}) HasMX({{ $('HTTP Request').item.json.response.has_mx_records }}) StatusCode({{ $('HTTP Request').item.json.statusCode }}) ",
-            "lastNodeExecuted": "={{ $('HTTP Request').item.json.response.has_mx_records }}"
+            "outcome": "={{ $json.outcome }}",
+            "message": "={{ $json.message }}",
+            "task_name": "={{ $json.task_name }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -610,7 +609,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": true
             }
           ]
         },
@@ -621,7 +621,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        280,
+        100,
         460
       ],
       "credentials": {
@@ -642,7 +642,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -820,
+        -1260,
         360
       ]
     },
@@ -657,7 +657,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -560,
+        -1000,
         360
       ]
     },
@@ -672,7 +672,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -300,
+        -740,
         360
       ]
     },
@@ -687,7 +687,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -40,
+        -480,
         360
       ]
     },
@@ -702,7 +702,67 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        220,
+        40,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "time",
+              "stringValue": "={{ $now.format(\"HH:mm:ss\") }}"
+            },
+            {
+              "name": "date",
+              "stringValue": "={{ $now.format(\"DD\") }}"
+            },
+            {
+              "name": "ip_address",
+              "stringValue": "={{ $('Webhook').item.json.headers['x-real-ip'] }}"
+            },
+            {
+              "name": "user_os",
+              "stringValue": "={{ $('Webhook').item.json.headers['sec-ch-ua-platform'] }}"
+            },
+            {
+              "name": "task_name",
+              "stringValue": "Email Verification"
+            },
+            {
+              "name": "outcome",
+              "stringValue": "success"
+            },
+            {
+              "name": "message",
+              "stringValue": "= Email: {{ $('HTTP Request').item.json.response.email }} / Valid: {{ $('HTTP Request').item.json.response.syntax.valid }} / Deliverable: {{ $('HTTP Request').item.json.response.smtp.deliverable }} / Catch All: {{ $('HTTP Request').item.json.response.smtp.catch_all }} / Inbox Full: {{ $('HTTP Request').item.json.response.smtp.full_inbox}} / Has MX Records: {{ $('HTTP Request').item.json.response.has_mx_records }} / Disposable: {{ $('HTTP Request').item.json.response.disposable }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47cff81d-07a4-4741-afb3-7aa5c3753f56",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        -160,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set Headers \n**Formats headers and variables**",
+        "height": 248,
+        "width": 222
+      },
+      "id": "fcb76fc5-8a7c-46bf-ad0d-390aa946de67",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -220,
         360
       ]
     }
@@ -742,6 +802,17 @@
       ]
     },
     "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
       "main": [
         [
           {
