@@ -32,7 +32,7 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
             "time": "={{ $now.format(\"HH:mm:ss\") }}",
             "date": "={{ $now.format(\"DD\") }}",
@@ -166,7 +166,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        1120,
+        1320,
         440
       ],
       "credentials": {
@@ -175,10 +175,67 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "time",
+              "stringValue": "={{ $now.format(\"HH:mm:ss\") }}"
+            },
+            {
+              "name": "date",
+              "stringValue": "={{ $now.format(\"DD\") }}"
+            },
+            {
+              "name": "ip_address",
+              "stringValue": "-"
+            },
+            {
+              "name": "user_os",
+              "stringValue": "-"
+            },
+            {
+              "name": "task_name",
+              "stringValue": "Error Node Triggered"
+            },
+            {
+              "name": "outcome",
+              "stringValue": "ERROR"
+            },
+            {
+              "name": "message",
+              "stringValue": "=Workflow: {{ $json.workflow.name }} / Workflow ID: {{ $json.workflow.id }} / Node With Error: {{ $json.execution.lastNodeExecuted }} / Message: {{ $json.execution.error.message }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "1455f1c9-ec80-4f8f-95c9-d9d04e1eebd4",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        1040,
+        440
+      ]
     }
   ],
   "connections": {
     "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
       "main": [
         [
           {
