@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -40,
+        -480,
         400
       ],
       "webhookId": "879573e2-a92e-4d2b-99ba-b7de2c0d8527"
@@ -49,7 +49,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        240,
+        -200,
         400
       ],
       "credentials": {
@@ -92,7 +92,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        520,
+        80,
         400
       ]
     },
@@ -114,10 +114,10 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=894085312"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
-            "business_id": "={{ $('Google Sheets').item.json.business_id }}",
-            "phone_type": "={{ $json.data.line_type }}"
+            "business_id": "={{ $json.business_id }}",
+            "phone_type": "={{ $json.phone_type }}"
           },
           "matchingColumns": [
             "business_id"
@@ -482,7 +482,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        800,
+        640,
         400
       ],
       "credentials": {
@@ -510,7 +510,7 @@
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NSgHwtBedt8SUTVUSSB1zOxPsXLlydGbdV3vu9BR9XA/edit#gid=1959914128"
         },
         "columns": {
-          "mappingMode": "defineBelow",
+          "mappingMode": "autoMapInputData",
           "value": {
             "time": "={{ $now.format(\"HH:mm:ss\") }}",
             "date": "={{ $now.format(\"DD\") }}",
@@ -643,7 +643,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
       "position": [
-        1060,
+        1180,
         400
       ],
       "credentials": {
@@ -664,7 +664,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -120,
+        -560,
         300
       ]
     },
@@ -679,7 +679,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        160,
+        -280,
         300
       ]
     },
@@ -694,7 +694,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        440,
+        0,
         300
       ]
     },
@@ -709,7 +709,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        720,
+        560,
         300
       ]
     },
@@ -717,14 +717,116 @@
       "parameters": {
         "content": "## Update Logs \n**Updates logs and records verifications results**",
         "height": 262,
-        "width": 260
+        "width": 222
       },
       "id": "9c6bb531-aad8-4c85-a30f-819608505316",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1000,
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "business_id",
+              "stringValue": "={{ $('Google Sheets').item.json.business_id }}"
+            },
+            {
+              "name": "phone_type",
+              "stringValue": "={{ $json.data.line_type }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "ae081fe0-235a-4603-820d-6e86bdaf598c",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        360,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set Headers\n**Updates lead data in Google Sheets**",
+        "height": 262,
+        "width": 260
+      },
+      "id": "74dcc51e-7f5c-4770-b477-1d7a1c698350",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        280,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "time",
+              "stringValue": "={{ $now.format(\"HH:mm:ss\") }}"
+            },
+            {
+              "name": "date",
+              "stringValue": "={{ $now.format(\"DD\") }}"
+            },
+            {
+              "name": "ip_address",
+              "stringValue": "={{ $('Webhook').item.json.headers['x-real-ip'] }}"
+            },
+            {
+              "name": "user_os",
+              "stringValue": "={{ $('Webhook').item.json.headers['sec-ch-ua-platform'] }}"
+            },
+            {
+              "name": "task_name",
+              "stringValue": "Phone Verification"
+            },
+            {
+              "name": "outcome",
+              "stringValue": "={{ $('HTTP Request').item.json.status }}"
+            },
+            {
+              "name": "message",
+              "stringValue": "=Phone: {{ $('HTTP Request').item.json.data.e164_format }} / Type: {{ $('HTTP Request').item.json.data.line_type }} / Status: {{ $('HTTP Request').item.json.data.status }} / Carrier: {{ $('HTTP Request').item.json.data.carrier }}"
+            }
+          ]
+        },
+        "include": "none",
+        "options": {}
+      },
+      "id": "0153ab00-a8ce-4a5b-acf4-e4e45fa3e774",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        920,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set Headers\n**Updates lead data in Google Sheets**",
+        "height": 262,
+        "width": 260
+      },
+      "id": "92e12498-cf4c-42e1-9dfa-352426c9eafd",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        840,
         300
       ]
     }
@@ -756,7 +858,7 @@
       "main": [
         [
           {
-            "node": "Google Sheets1",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -764,6 +866,28 @@
       ]
     },
     "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
       "main": [
         [
           {
@@ -775,5 +899,36 @@
       ]
     }
   },
-  "pinData": {}
+  "pinData": {
+    "Webhook": [
+      {
+        "headers": {
+          "host": "n8n.makesimple.click",
+          "x-forwarded-scheme": "https",
+          "x-forwarded-proto": "https",
+          "x-forwarded-for": "135.134.155.175",
+          "x-real-ip": "135.134.155.175",
+          "sec-ch-ua": "\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "upgrade-insecure-requests": "1",
+          "dnt": "1",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+          "sec-fetch-site": "cross-site",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-dest": "document",
+          "referer": "https://www.google.com/",
+          "accept-encoding": "gzip, deflate, br",
+          "accept-language": "en-US,en;q=0.9",
+          "cookie": "rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX19ISHhmyB1fjcBLTdNXQMGbCQTvbtogNW4%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2BnrVXmWLibQ%2BY82CxsMsm4Hx89M6GXdMQ%3D; _ga=GA1.1.105256380.1696397091; _ga_1X0XQRMB4F=GS1.1.1699080729.46.1.1699080788.0.0.0; n8n-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJiZjA4NzY3LTM2ZDctNDE0My04M2MwLTJmN2ViNTAxOTc5ZCIsImVtYWlsIjoiamVkaGFubGluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiZTk5ZGE2Zjg4ZmYzOTA3NzRlNzExMTM0ZjhhZDQ2Mzc0NDlmMzFjY2YyNGI2MmIyZGU5Yzc3M2NkZGJiMGUwOSIsImlhdCI6MTcwMjM2NDM5NSwiZXhwIjoxNzAyOTY5MTk1fQ.KMNRqubDXnLdpg1S6PitND9OUC9V3Mar0VwTE6YlnOs; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX19ggx08VP8aju5XLTWUMzyMKP3xWDNOoVm%2BfdxJkaK0XuxOVn3ABb2Z6BJnkrB223N5uuLpVvEvoA%3D%3D; rl_user_id=RudderEncrypt%3AU2FsdGVkX189z%2F59bkmk4uWuHUsehp%2FXQLQecIAfpF6H7EJDMw08gNjIpNiwSNgBtxdK2bKZda2I0qLrsgX61AJmSN6LNBzqEMYJzpaUWlBCsOoigpAqep0o6Al5Hfs3oA4TsFKsGeXr9jguUyc13EVBkIxSCc9qkF4APVlLadQ%3D; rl_trait=RudderEncrypt%3AU2FsdGVkX19ra6FPODSUxImvsG5iddqdGlsaxesITFfPOaoQBNAAbp2r29icDfvmPf9MKMPSWDEq4K1d%2FBuPYC%2F0DQnK6GdKBKEY6RXL%2F3urlQ%2BHQkqmdQcZQIGpuJdflMx0WiGGVKOCaEIs16Qktg%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22distinct_id%22%3A%22de9483a760ca370949877532d71559046597a9378fbd31e6a68fd205b2f1f37d%232bf08767-36d7-4143-83c0-2f7eb501979d%22%2C%22%24sesid%22%3A%5B1702435412227%2C%22018c610e-d903-7abf-bd4f-8e267deb08fe%22%2C1702435412227%5D%7D; rl_session=RudderEncrypt%3AU2FsdGVkX19wgU4XtUHbvnq9LILjdmEnZMom3dVRpbxQsUwJ%2F6U3OfA5Lqff9bBwn5RC6jGzpu%2Fk%2BXHt4VKkQDKMoH8eiRrz9wGKRJ%2Be6FOEnzlckXI%2B8CEGeUWbeDet8DTgAFYgsXmFX06Ni9UFnQ%3D%3D"
+        },
+        "params": {},
+        "query": {
+          "business_id": "0x8085879e7732c1e7:0x13147be3501f03f8",
+          "clearoutapi": "9bf6122e99e8ecea2fa8333e409e5de9:5660164b3902c1bb99df6bfa666c022210da4ac52a751ef92b190fb606f952db"
+        }
+      }
+    ]
+  }
 }
